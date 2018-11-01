@@ -1,0 +1,39 @@
+import React, { Component } from "react";
+
+import styled from "styled-components";
+
+const FloatControls = styled.div`
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background-color: #e6fbff;
+  padding: 10px;
+  border: 1px solid black;
+`;
+
+const Button = styled.button`
+  font-size: 1rem;
+  padding: 5px;
+  margin-right: 2px;
+  border: 1px solid red;
+  background-color: white;
+`;
+
+const Play = styled(Button)`
+  background-color: white;
+`;
+
+export class Controls extends Component {
+  render() {
+    return (
+      <FloatControls>
+        <Play>Play</Play>
+        <Button>Stop</Button>
+        <Button>Record</Button>
+        <Button>Clear</Button>
+      </FloatControls>
+    );
+  }
+}
+
+export default Controls;
