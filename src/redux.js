@@ -25,6 +25,10 @@ export const moveCursorPos = pos => ({
   payload: pos
 });
 
+export const startRecording = () => ({
+  type: "START_RECORDING"
+});
+
 export const clearGists = () => ({ type: "CLEAR_GISTS" });
 
 export const getGists = gistId => async dispatch => {
@@ -70,15 +74,31 @@ export const reducers = (state = {}, action) => {
         active: action.index
       };
     case "READ_CURSOR_POS":
-      return {
-        ...state,
-        cursor: action.payload
-      };
+      if (state.recordingStatus === true) {
+        return {
+          ...state,
+          cursor: action.payload,
+          sessionRecording: [...state.sessionRecording, action.payload]
+        };
+      } else {
+        return {
+          ...state,
+          cursor: action.payload
+        };
+      }
+
     case "MOVE_CURSOR_POS":
       return {
         ...state,
         cursor: action.payload
       };
+    case "START_RECORDING":
+      return {
+        ...state,
+        recordingStatus: true,
+        sessionRecording: [state.cursor]
+      };
+
     default:
       return state;
   }
@@ -89,7 +109,13 @@ const middleware = [thunk];
 
 // store.js
 export function configureStore(
-  initialState = { cursor: { line: 0, ch: 0 }, active: 0, gists: [] }
+  initialState = {
+    cursor: { line: 0, ch: 0 },
+    active: 0,
+    gists: [],
+    recordingStatus: false,
+    sessionRecording: []
+  }
 ) {
   const store = createStore(
     reducers,

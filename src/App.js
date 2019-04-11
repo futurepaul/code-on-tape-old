@@ -2,7 +2,13 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 
-import { pubMoveCursorPos, getGists, setActive, readCursorPos } from "./redux";
+import {
+  pubMoveCursorPos,
+  getGists,
+  setActive,
+  readCursorPos,
+  startRecording
+} from "./redux";
 
 import {
   Title,
@@ -78,7 +84,7 @@ export class App extends Component {
             }
           </ul>
         </div>
-        <Controls />
+        <Controls onClickRecord={() => this.props.startRecording()} />
       </Wrapper>
     );
   }
@@ -94,7 +100,8 @@ const mapDispatchToProps = {
   pubMoveCursorPos,
   getGists,
   setActive,
-  readCursorPos
+  readCursorPos,
+  startRecording
 };
 const AppContainer = connect(
   mapStateToProps,

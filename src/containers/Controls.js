@@ -9,6 +9,7 @@ const FloatControls = styled.div`
   background-color: #e6fbff;
   padding: 10px;
   border: 1px solid black;
+  z-index: 10;
 `;
 
 const Button = styled.button`
@@ -23,17 +24,13 @@ const Play = styled(Button)`
   background-color: white;
 `;
 
-export class Controls extends Component {
-  render() {
-    return (
-      <FloatControls>
-        <Play>Play</Play>
-        <Button>Stop</Button>
-        <Button>Record</Button>
-        <Button>Clear</Button>
-      </FloatControls>
-    );
-  }
-}
+const Controls = ({ onClickRecord }) => (
+  <FloatControls>
+    <Play> Play</Play>
+    <Button>Stop</Button>
+    <Button onClick={onClickRecord}>Record</Button>
+    <Button>Clear</Button>
+  </FloatControls>
+);
 
 export default Controls;
