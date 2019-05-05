@@ -24,11 +24,12 @@ const Play = styled(Button)`
   background-color: white;
 `;
 
-const Controls = ({ onClickRecord }) => (
+const Controls = ({ onClickRecord, onClickStopRecord, onClickPlay }) => (
   <FloatControls>
-    <Play> Play</Play>
+    <Play onClick={onClickPlay}> Play</Play>
     <Button>Stop</Button>
     <Button onClick={onClickRecord}>Record</Button>
+    <Button onClick={onClickStopRecord}>Stop Record</Button>
     <Button>Clear</Button>
   </FloatControls>
 );

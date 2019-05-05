@@ -29,6 +29,10 @@ export const startRecording = () => ({
   type: "START_RECORDING"
 });
 
+export const stopRecording = () => ({
+  type: "STOP_RECORDING"
+});
+
 export const clearGists = () => ({ type: "CLEAR_GISTS" });
 
 export const getGists = gistId => async dispatch => {
@@ -53,6 +57,32 @@ export const pubMoveCursorPos = pos => async dispatch => {
   dispatch(moveCursorPos(pos));
 };
 
+export const delayedMove = (pos, delay) => async dispatch => {
+  console.log(`Delayed move: ${pos.line}, ${pos.ch}, ${delay}`);
+  setTimeout(() => {
+    dispatch(pubMoveCursorPos(pos));
+  }, delay);
+};
+
+export const play = () => async dispatch => {
+  // dispatch(startPlayback());
+  console.log("playing!");
+  for (var i = 0; i < 100; i++) {
+    console.log("playing...", i);
+    dispatch(delayedMove({ line: i, ch: i }, i * 100));
+  }
+};
+
+export const setPlayState = (playing, playhead) => ({
+  type: "SET_PLAY_STATE",
+  playing: playing,
+  playhead: playhead
+});
+
+export const startPlayback = () => ({
+  type: "START_PLAYBACK"
+});
+
 // reducers.js
 
 export const reducers = (state = {}, action) => {
@@ -74,11 +104,17 @@ export const reducers = (state = {}, action) => {
         active: action.index
       };
     case "READ_CURSOR_POS":
-      if (state.recordingStatus === true) {
+      if (state.recordingStatus.recording === true) {
         return {
           ...state,
           cursor: action.payload,
-          sessionRecording: [...state.sessionRecording, action.payload]
+          sessionRecording: [
+            ...state.sessionRecording,
+            {
+              ...action.payload,
+              time: Date.now() - state.recordingStatus.startTime
+            }
+          ]
         };
       } else {
         return {
@@ -93,10 +129,22 @@ export const reducers = (state = {}, action) => {
         cursor: action.payload
       };
     case "START_RECORDING":
+      let startTime = Date.now();
       return {
         ...state,
-        recordingStatus: true,
-        sessionRecording: [state.cursor]
+        recordingStatus: { recording: true, startTime: startTime },
+        sessionRecording: [{ ...state.cursor, time: 0 }]
+      };
+
+    case "STOP_RECORDING":
+      return {
+        ...state,
+        recordingStatus: { ...state.recordingStatus, recording: false }
+      };
+
+    case "SET_PLAY_STATE":
+      return {
+        ...state
       };
 
     default:
@@ -113,7 +161,8 @@ export function configureStore(
     cursor: { line: 0, ch: 0 },
     active: 0,
     gists: [],
-    recordingStatus: false,
+    recordingStatus: { recording: false, startTime: 0 },
+    playbackStatus: { playing: false, playhead: 0 },
     sessionRecording: []
   }
 ) {

@@ -4,10 +4,13 @@ import { connect } from "react-redux";
 
 import {
   pubMoveCursorPos,
+  delayedMove,
   getGists,
   setActive,
   readCursorPos,
-  startRecording
+  startRecording,
+  stopRecording,
+  play
 } from "./redux";
 
 import {
@@ -64,9 +67,12 @@ export class App extends Component {
                 {gist.filename}
               </Tab>
             ))}
-          <Tab
-            onClick={() => this.props.pubMoveCursorPos({ line: 2, ch: 2 })}
-          />
+          <Tab onClick={() => this.props.pubMoveCursorPos({ line: 2, ch: 2 })}>
+            Move Test
+          </Tab>
+          <Tab onClick={() => this.props.delayedMove({ line: 4, ch: 5 }, 1000)}>
+            Delayed Move Test
+          </Tab>
         </Nav>
 
         <div>
@@ -84,7 +90,11 @@ export class App extends Component {
             }
           </ul>
         </div>
-        <Controls onClickRecord={() => this.props.startRecording()} />
+        <Controls
+          onClickRecord={() => this.props.startRecording()}
+          onClickStopRecord={() => this.props.stopRecording()}
+          onClickPlay={() => this.props.play()}
+        />
       </Wrapper>
     );
   }
@@ -98,10 +108,13 @@ const mapStateToProps = (state, ownProps) => ({
 });
 const mapDispatchToProps = {
   pubMoveCursorPos,
+  delayedMove,
   getGists,
   setActive,
   readCursorPos,
-  startRecording
+  startRecording,
+  stopRecording,
+  play
 };
 const AppContainer = connect(
   mapStateToProps,
