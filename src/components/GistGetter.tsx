@@ -1,3 +1,8 @@
+import * as React from "react";
+
+import styled from "styled-components";
+import { useOvermind } from "../overmind";
+
 const GistInput = styled.input`
   font-size: 1rem;
   border: 1px solid black;
@@ -11,19 +16,32 @@ const GistButton = styled.button`
   padding: 5px;
 `;
 
-export const GistGetter: React.SFC<Props> = ({
-  gistId,
-  
-})
+// export const GistGetter: React.SFC<Props> = ({
+//   gistId,
 
+// })
 
-<GistInput
+// <GistInput
 
-  type="text"
-  value={this.state.gistId}
-  onChange={ev => this.setState({ gist: ev.target.value })}
-  placehold="A gist..."
-/>
-<GistButton onClick={() => this.updateGistList(this.state.gistId)}>
-  Get Gist
-</GistButton>
+//   type="text"
+//   value={this.state.gistId}
+//   onChange={ev => this.setState({ gist: ev.target.value })}
+//   placehold="A gist..."
+// />
+// <GistButton onClick={() => this.updateGistList(this.state.gistId)}>
+//   Get Gist
+// </GistButton>
+
+export const GistGetter: React.FunctionComponent = () => {
+  const { state, actions } = useOvermind();
+
+  return (
+    <div>
+      <GistInput
+        value={state.gistId}
+        onChange={event => actions.updateGist(event.currentTarget.value)}
+      />
+      <GistButton onClick={event => actions.loadCode()}>Get Gist</GistButton>
+    </div>
+  );
+};
