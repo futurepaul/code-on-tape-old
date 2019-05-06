@@ -2,6 +2,8 @@ import * as React from "react";
 import * as monaco from "monaco-editor";
 import { EditorRaw } from "./EditorRaw";
 
+import styled from "styled-components";
+
 interface Props {
   value: string;
 }
@@ -26,7 +28,7 @@ export class Editor extends React.Component<Props, State> {
   private onEditor = (editor: monaco.editor.IStandaloneCodeEditor) => {
     console.log("on editor");
 
-    editor.setValue("Wahooo!");
+    editor.setValue(this.props.value);
 
     editor.onDidChangeModelContent(event => {
       if (!this.locked) {
@@ -42,10 +44,6 @@ export class Editor extends React.Component<Props, State> {
   };
 
   render() {
-    return (
-      <>
-        <EditorRaw onEditor={this.onEditor} />
-      </>
-    );
+    return <EditorRaw onEditor={this.onEditor} />;
   }
 }

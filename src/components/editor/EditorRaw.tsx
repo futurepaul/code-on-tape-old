@@ -1,6 +1,12 @@
 import * as React from "react";
 import * as monaco from "monaco-editor";
 
+import styled from "styled-components";
+const EditorDiv = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
 (self as any).MonacoEnvironment = {
   getWorkerUrl: function(moduleId: string, label: string) {
     console.log("loading", moduleId, label);
@@ -20,11 +26,11 @@ import * as monaco from "monaco-editor";
   }
 };
 
-interface IProps {
+interface Props {
   onEditor: (editor: monaco.editor.IStandaloneCodeEditor) => void;
 }
 
-export class EditorRaw extends React.Component<IProps, {}> {
+export class EditorRaw extends React.Component<Props, {}> {
   private editor!: monaco.editor.IStandaloneCodeEditor;
 
   componentDidMount() {
@@ -43,10 +49,12 @@ export class EditorRaw extends React.Component<IProps, {}> {
     //not sure what this is for?
     this.editor.getModel()!.setEOL(monaco.editor.EndOfLineSequence.LF);
 
+    (window as any).addEventListener("resize", () => this.editor.layout());
+
     this.props.onEditor(this.editor);
   }
 
   render() {
-    return <div id="monacoEditor" style={{ flex: 1 }} />;
+    return <EditorDiv id="monacoEditor" />;
   }
 }

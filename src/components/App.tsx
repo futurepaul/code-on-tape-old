@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { Editor } from "./editor/Editor";
 
 const Main = styled.div`
-  height: 100vh,
-  width: 100vw
-  `;
+  height: 100vh;
+  width: 100vw;
+`;
 
 export class App extends React.Component<{}, {}> {
   render() {

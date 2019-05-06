@@ -2,15 +2,19 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
+const createStyledComponentsTransformer = require("typescript-plugin-styled-components")
+  .default;
+const styledComponentsTransformer = createStyledComponentsTransformer();
+
 module.exports = {
   mode: "development",
   entry: {
     app: "./src/index.tsx",
-    "editor.worker": "monaco-editor/esm/vs/editor/editor.worker.js"
-    // "json.worker": "monaco-editor/esm/vs/language/json/json.worker",
-    // "css.worker": "monaco-editor/esm/vs/language/css/css.worker",
-    // "html.worker": "monaco-editor/esm/vs/language/html/html.worker",
-    // "ts.worker": "monaco-editor/esm/vs/language/typescript/ts.worker",
+    "editor.worker": "monaco-editor/esm/vs/editor/editor.worker.js",
+    "json.worker": "monaco-editor/esm/vs/language/json/json.worker",
+    "css.worker": "monaco-editor/esm/vs/language/css/css.worker",
+    "html.worker": "monaco-editor/esm/vs/language/html/html.worker",
+    "ts.worker": "monaco-editor/esm/vs/language/typescript/ts.worker"
   },
   output: {
     globalObject: "self",
@@ -21,7 +25,12 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: "ts-loader",
+        loader: "ts-loader",
+        options: {
+          getCustomTransformers: () => ({
+            before: [styledComponentsTransformer]
+          })
+        },
         exclude: /node_modules/
       },
       {
