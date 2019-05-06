@@ -4,6 +4,7 @@ import * as ReactDOM from "react-dom";
 import { App } from "./components/App";
 
 import "./normalize.css";
+import "./global.css";
 
 const ROOT = document.querySelector(".container");
 
