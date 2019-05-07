@@ -11,4 +11,11 @@ export type State = {
   files: Array<File>;
   activeTab: number;
   cursorPosition: IPosition;
+  recording: Array<PlaybackFrame>;
+  currentPlaybackFrame: number;
+};
+
+export type PlaybackFrame = {
+  time: number;
+  activeTab: number;
 };
