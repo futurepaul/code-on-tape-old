@@ -4,8 +4,11 @@ import { EditorRaw } from "./EditorRaw";
 
 import styled from "styled-components";
 
+import { IPosition } from "../../overmind/types";
+
 interface Props {
   value: string;
+  cursor: monaco.IPosition;
 }
 
 interface State {
@@ -42,6 +45,17 @@ export class Editor extends React.Component<Props, State> {
 
     this.setState({ editor });
   };
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.value !== prevProps.value) {
+      this.state.editor.setValue(this.props.value);
+    }
+
+    if (this.props.cursor !== prevProps.cursor) {
+      this.state.editor.setPosition(this.props.cursor);
+      this.state.editor.focus();
+    }
+  }
 
   render() {
     return <EditorRaw onEditor={this.onEditor} />;

@@ -1,15 +1,10 @@
-type File = {
-  filename: string;
-  content: string;
-};
-export type State = {
-  gistId: string;
-  code: Array<File>;
-};
+import { File, IPosition, State } from "./types";
 
 export const state: State = {
   gistId: "",
-  code: [
+  files: [
     { filename: "Hello", content: "//Put in a gist ID to get some files!" }
-  ]
+  ],
+  activeTab: 0,
+  cursorPosition: { column: 0, lineNumber: 0 }
 };

@@ -42,7 +42,8 @@ export class EditorRaw extends React.Component<Props, {}> {
         language: "javascript",
         minimap: { enabled: false },
         theme: "vs-dark",
-        fontSize: 16
+        fontSize: 16,
+        readOnly: true
       }
     );
 

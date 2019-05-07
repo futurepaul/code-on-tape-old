@@ -16,22 +16,6 @@ const GistButton = styled.button`
   padding: 5px;
 `;
 
-// export const GistGetter: React.SFC<Props> = ({
-//   gistId,
-
-// })
-
-// <GistInput
-
-//   type="text"
-//   value={this.state.gistId}
-//   onChange={ev => this.setState({ gist: ev.target.value })}
-//   placehold="A gist..."
-// />
-// <GistButton onClick={() => this.updateGistList(this.state.gistId)}>
-//   Get Gist
-// </GistButton>
-
 export const GistGetter: React.FunctionComponent = () => {
   const { state, actions } = useOvermind();
 

@@ -1,26 +1,9 @@
+import * as React from "react";
+
 import styled from "styled-components";
+import { useOvermind } from "../overmind";
 
-export const Wrapper = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: grid;
-  grid-template-rows: 3rem 3rem 1fr;
-`;
-
-export const Title = styled.h1`
-  font-weight: bold;
-  font-size: 1.5rem;
-`;
-
-export const Header = styled.header`
-  padding: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #e6fbff;
-`;
-
-export const Nav = styled.div`
+export const NavDiv = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
@@ -44,3 +27,21 @@ export const Tab = styled.button<TabProps>`
   border-right: 2px solid black;
   border-bottom: none;
 `;
+
+export const Nav: React.FunctionComponent = () => {
+  const { state, actions } = useOvermind();
+
+  return (
+    <NavDiv>
+      {state.files.map((file, index) => (
+        <Tab
+          isActive={index === state.activeTab}
+          onClick={() => actions.setActiveTab(index)}
+          key={index}
+        >
+          {state.files[index].filename}
+        </Tab>
+      ))}
+    </NavDiv>
+  );
+};

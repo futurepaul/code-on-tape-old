@@ -2,6 +2,8 @@ import * as React from "react";
 
 import styled from "styled-components";
 
+import { useOvermind } from "../overmind";
+
 const FloatControls = styled.div`
   position: fixed;
   bottom: 10px;
@@ -30,18 +32,19 @@ interface Props {
   onClickPlay(): void;
 }
 
-export const Controls: React.SFC<Props> = ({
-  onClickPlay,
-  onClickRecord,
-  onClickStopRecord
-}) => {
+export const Controls: React.FunctionComponent = () => {
+  const { state, actions } = useOvermind();
+
   return (
     <FloatControls>
-      <Play onClick={onClickPlay}> Play</Play>
+      <Play onClick={actions.onClickPlay}> Play</Play>
       <Button>Stop</Button>
-      <Button onClick={onClickRecord}>Record</Button>
-      <Button onClick={onClickStopRecord}>Stop Record</Button>
+      {/* <Button onClick={onClickRecord}>Record</Button>
+      <Button onClick={onClickStopRecord}>Stop Record</Button> */}
       <Button>Clear</Button>
+      <Button onClick={() => actions.setCursor({ lineNumber: 1, column: 3 })}>
+        Move to (1, 3)
+      </Button>
     </FloatControls>
   );
 };
