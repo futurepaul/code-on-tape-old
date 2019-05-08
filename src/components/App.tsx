@@ -6,6 +6,7 @@ import { GistGetter } from "./GistGetter";
 import { Nav } from "./Nav";
 
 import { useOvermind } from "../overmind";
+import { ActionSheetIOS } from "react-native";
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -28,12 +29,12 @@ const Header = styled.header`
 `;
 
 export const App: React.FunctionComponent = () => {
-  const { state } = useOvermind();
+  const { state, actions } = useOvermind();
 
   return (
     <Wrapper>
       <Header>
-        <Title>Code on tape</Title>
+        <Title>Code On Tape</Title>
         <GistGetter />
       </Header>
       <Nav />
@@ -41,6 +42,7 @@ export const App: React.FunctionComponent = () => {
       <Editor
         value={state.files[state.activeTab].content}
         cursor={state.cursorPosition}
+        onEditorCursorMove={actions.onEditorCursorMove}
       />
       <Controls />
     </Wrapper>

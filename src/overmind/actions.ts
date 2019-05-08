@@ -1,6 +1,5 @@
 import { Action } from "overmind";
 import { IPosition } from "./types";
-import { ActionSheetIOS } from "react-native";
 
 export const updateGist: Action<string> = ({ state }, newGist) => {
   state.gistId = newGist;
@@ -10,8 +9,42 @@ export const loadCode: Action = async ({ effects, state }) => {
   state.files = await effects.api.fetchGist(state.gistId);
 };
 
-export const setActiveTab: Action<number> = ({ state }, tabIndex) => {
+export const updateRecording: Action = ({ state }) => {
+  state.recording = [
+    ...state.recording,
+    {
+      time: Date.now() - state.recordingStartTime,
+      activeTab: state.activeTab,
+      cursorPosition: {
+        column: state.cursorPosition.column,
+        lineNumber: state.cursorPosition.lineNumber
+      }
+    }
+  ];
+};
+
+//THE BIG TWO
+export const setActiveTab: Action<number> = ({ state, actions }, tabIndex) => {
   state.activeTab = tabIndex;
+  if (state.isRecording) {
+    actions.updateRecording();
+  }
+};
+
+export const onEditorCursorMove: Action<IPosition> = (
+  { state, actions },
+  position
+) => {
+  state.cursorPosition = position;
+  if (state.isRecording) {
+    actions.updateRecording();
+  }
+};
+
+export const setCursor: Action<IPosition> = ({ state, actions }, position) => {
+  state.cursorPosition = position;
+
+  window.console.log("setting cursor");
 };
 
 //PLAYBACK LOOP
@@ -21,36 +54,53 @@ export const loop: Action = async ({ state, actions }) => {
 };
 
 export const continuePlayback: Action = async ({ state, actions }) => {
-  let len = state.recording.length;
-  let currentFrame = state.currentPlaybackFrame;
-  let nextFrame = currentFrame + 1;
-  state.activeTab = state.recording[currentFrame].activeTab;
+  if (state.isPlaying) {
+    let len = state.recording.length;
+    let currentFrame = state.currentPlaybackFrame;
+    let nextFrame = currentFrame + 1;
 
-  if (nextFrame < state.recording.length) {
-    setTimeout(() => {
-      actions.loop();
-    }, state.recording[nextFrame].time - state.recording[currentFrame].time);
-  } else {
-    window.console.log("Playback complete!");
+    window.console.log(state.recording[currentFrame]);
+
+    actions.setActiveTab(state.recording[currentFrame].activeTab);
+    actions.setCursor({
+      column: state.recording[currentFrame].cursorPosition.column,
+      lineNumber: state.recording[currentFrame].cursorPosition.lineNumber
+    });
+
+    if (nextFrame < state.recording.length) {
+      setTimeout(() => {
+        actions.loop();
+      }, state.recording[nextFrame].time - state.recording[currentFrame].time);
+    } else {
+      window.console.log("Playback complete!");
+      state.isPlaying = false;
+    }
   }
 };
 
 //CONTROLS
 export const onClickPlay: Action = ({ state, actions }) => {
-  window.console.log("play");
-  state.currentPlaybackFrame = 0;
-  actions.continuePlayback();
+  if (!state.isPlaying && !state.isRecording) {
+    state.isPlaying = true;
+    state.currentPlaybackFrame = 0;
+    actions.continuePlayback();
+  } else {
+    state.isPlaying = false;
+  }
 };
 
-export const onClickRecord: Action = ({ state }) => {
-  window.console.log("record");
+export const onClickRecord: Action = ({ state, actions }) => {
+  if (!state.isRecording && !state.isPlaying) {
+    state.isRecording = true;
+    state.recording = [];
+    window.console.log("recording:", state.recording);
+    state.recordingStartTime = Date.now();
+    actions.updateRecording();
+  } else {
+    state.isRecording = false;
+  }
 };
 
 export const onClickStop: Action = ({ state }) => {
   window.console.log("stop");
-};
-
-export const setCursor: Action<IPosition> = ({ state }, position) => {
-  state.cursorPosition = position;
-  window.console.log(state.cursorPosition);
 };

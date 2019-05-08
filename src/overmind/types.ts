@@ -12,10 +12,14 @@ export type State = {
   activeTab: number;
   cursorPosition: IPosition;
   recording: Array<PlaybackFrame>;
+  isRecording: boolean;
+  isPlaying: boolean;
   currentPlaybackFrame: number;
+  recordingStartTime: number;
 };
 
 export type PlaybackFrame = {
   time: number;
   activeTab: number;
+  cursorPosition: IPosition;
 };

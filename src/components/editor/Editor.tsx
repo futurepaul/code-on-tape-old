@@ -9,6 +9,7 @@ import { IPosition } from "../../overmind/types";
 interface Props {
   value: string;
   cursor: monaco.IPosition;
+  onEditorCursorMove(position: IPosition): void;
 }
 
 interface State {
@@ -16,14 +17,6 @@ interface State {
 }
 
 export class Editor extends React.Component<Props, State> {
-  /**
-   * this flag is set to true when changing the editor model
-   * content programatically (i.e. not by typing).
-   * when the flag is true the event handler for a human typing
-   * will no-op
-   */
-  private locked = false;
-
   state: State = {
     editor: undefined
   };
@@ -34,13 +27,12 @@ export class Editor extends React.Component<Props, State> {
     editor.setValue(this.props.value);
 
     editor.onDidChangeModelContent(event => {
-      if (!this.locked) {
-        console.log("editor changes", event.changes);
-      }
+      // console.log("editor changes", event.changes);
     });
 
     editor.onDidChangeCursorPosition(event => {
-      console.info(`cursor position changed ${event.position}`);
+      // console.info(`cursor position changed ${event.position}`);
+      this.props.onEditorCursorMove(event.position);
     });
 
     this.setState({ editor });

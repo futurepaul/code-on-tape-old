@@ -22,14 +22,18 @@ const Button = styled.button`
   background-color: white;
 `;
 
-const Play = styled(Button)`
-  background-color: white;
+const Play = styled(Button)<ButtonProps>`
+  background-color: ${(props: ButtonProps) =>
+    props.isActive ? "red" : "white"};
 `;
 
-interface Props {
-  onClickRecord(): void;
-  onClickStopRecord(): void;
-  onClickPlay(): void;
+const Record = styled(Button)<ButtonProps>`
+  background-color: ${(props: ButtonProps) =>
+    props.isActive ? "red" : "white"};
+`;
+
+interface ButtonProps {
+  readonly isActive: boolean;
 }
 
 export const Controls: React.FunctionComponent = () => {
@@ -37,14 +41,13 @@ export const Controls: React.FunctionComponent = () => {
 
   return (
     <FloatControls>
-      <Play onClick={actions.onClickPlay}> Play</Play>
-      <Button>Stop</Button>
-      {/* <Button onClick={onClickRecord}>Record</Button>
-      <Button onClick={onClickStopRecord}>Stop Record</Button> */}
-      <Button>Clear</Button>
-      <Button onClick={() => actions.setCursor({ lineNumber: 1, column: 3 })}>
-        Move to (1, 3)
-      </Button>
+      <Play isActive={state.isPlaying} onClick={actions.onClickPlay}>
+        {" "}
+        Play
+      </Play>
+      <Record isActive={state.isRecording} onClick={actions.onClickRecord}>
+        Record
+      </Record>
     </FloatControls>
   );
 };
