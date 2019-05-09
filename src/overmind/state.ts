@@ -17,6 +17,7 @@ export const state: State = {
     { time: 6000, activeTab: 2, cursorPosition: { column: 17, lineNumber: 2 } },
     { time: 7000, activeTab: 2, cursorPosition: { column: 15, lineNumber: 4 } }
   ],
+  audioRecording: null,
   isRecording: false,
   isPlaying: false,
   currentPlaybackFrame: 0,

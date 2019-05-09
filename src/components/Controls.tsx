@@ -39,7 +39,13 @@ interface ButtonProps {
 export const Controls: React.FunctionComponent = () => {
   const { state, actions } = useOvermind();
 
-  let [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
+  let [
+    audioURL,
+    audioBlob,
+    isRecording,
+    startRecording,
+    stopRecording
+  ] = useRecorder();
 
   let audioPlayerEl = useRef<HTMLMediaElement>(null);
 
@@ -67,6 +73,7 @@ export const Controls: React.FunctionComponent = () => {
       <Record isActive={state.isRecording} onClick={onRecordButtonClick}>
         Record
       </Record>
+      <Button onClick={() => actions.onClickSaveZip(audioBlob)}>Save</Button>
     </FloatControls>
   );
 };

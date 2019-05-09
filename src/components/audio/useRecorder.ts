@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 
-type Hook = () => [string, boolean, () => void, () => void];
+type Hook = () => [string, any, boolean, () => void, () => void];
 
 const useRecorder: Hook = () => {
   const [audioURL, setAudioURL] = useState<string>("");
+  const [audioBlob, setAudioBlob] = useState<any>(null);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [recorder, setRecorder] = useState<MediaRecorder | null>(null);
 
@@ -26,6 +27,7 @@ const useRecorder: Hook = () => {
     // Obtain the audio when ready.
     const handleData = (e: any) => {
       setAudioURL(URL.createObjectURL(e.data));
+      setAudioBlob(e.data);
     };
 
     recorder.addEventListener("dataavailable", handleData);
@@ -40,7 +42,7 @@ const useRecorder: Hook = () => {
     setIsRecording(false);
   };
 
-  return [audioURL, isRecording, startRecording, stopRecording];
+  return [audioURL, audioBlob, isRecording, startRecording, stopRecording];
 };
 
 async function requestRecorder() {

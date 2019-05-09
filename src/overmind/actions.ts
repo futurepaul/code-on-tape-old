@@ -104,3 +104,20 @@ export const onClickRecord: Action = ({ state, actions }) => {
 export const onClickStop: Action = ({ state }) => {
   window.console.log("stop");
 };
+
+export const onClickSaveZip: Action<any> = async (
+  { effects, state },
+  audioBlob
+) => {
+  effects.fileTools.saveAsZip(JSON.stringify(state.recording), audioBlob);
+};
+
+export const onClickImportZip: Action<any> = async (
+  { effects, state },
+  file
+) => {
+  let unzipped = effects.fileTools.loadFromZip(file);
+  console.log(unzipped);
+  // state.audioRecording = unzipped.recordingAudio;
+  // state.recording = unzipped.recordingJson;
+};

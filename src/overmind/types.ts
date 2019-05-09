@@ -12,6 +12,7 @@ export type State = {
   activeTab: number;
   cursorPosition: IPosition;
   recording: Array<PlaybackFrame>;
+  audioRecording?: any;
   isRecording: boolean;
   isPlaying: boolean;
   currentPlaybackFrame: number;

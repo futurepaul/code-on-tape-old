@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "file-saver": "^2.0.1",
+    "jszip": "^3.2.1",
     "overmind-react": "^18.1.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -17,6 +19,8 @@
   },
   "devDependencies": {
     "@types/dom-mediacapture-record": "^1.0.1",
+    "@types/file-saver": "^2.0.0",
+    "@types/jszip": "^3.1.5",
     "@types/react": "^16.8.16",
     "@types/react-dom": "^16.8.4",
     "@types/styled-components": "^4.1.14",
