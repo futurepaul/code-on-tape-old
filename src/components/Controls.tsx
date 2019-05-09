@@ -1,8 +1,8 @@
 import * as React from "react";
-
+import { useRef } from "react";
 import styled from "styled-components";
-
 import { useOvermind } from "../overmind";
+import useRecorder from "./audio/useRecorder";
 
 const FloatControls = styled.div`
   position: fixed;
@@ -39,13 +39,32 @@ interface ButtonProps {
 export const Controls: React.FunctionComponent = () => {
   const { state, actions } = useOvermind();
 
+  let [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
+
+  let audioPlayerEl = useRef<HTMLMediaElement>(null);
+
+  const onPlayButtonClick = () => {
+    audioPlayerEl.current.play();
+    actions.onClickPlay();
+  };
+
+  const onRecordButtonClick = () => {
+    if (!state.isRecording) {
+      startRecording();
+    } else {
+      stopRecording();
+    }
+    actions.onClickRecord();
+  };
+
   return (
     <FloatControls>
-      <Play isActive={state.isPlaying} onClick={actions.onClickPlay}>
+      <audio ref={audioPlayerEl} src={audioURL} />
+      <Play isActive={state.isPlaying} onClick={onPlayButtonClick}>
         {" "}
         Play
       </Play>
-      <Record isActive={state.isRecording} onClick={actions.onClickRecord}>
+      <Record isActive={state.isRecording} onClick={onRecordButtonClick}>
         Record
       </Record>
     </FloatControls>
