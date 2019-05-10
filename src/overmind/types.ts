@@ -13,6 +13,7 @@ export type State = {
   cursorPosition: IPosition;
   recording: Array<PlaybackFrame>;
   audioRecording?: any;
+  audioURL?: string;
   isRecording: boolean;
   isPlaying: boolean;
   currentPlaybackFrame: number;

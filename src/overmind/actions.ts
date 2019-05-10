@@ -1,5 +1,6 @@
 import { Action } from "overmind";
 import { IPosition } from "./types";
+import console = require("console");
 
 export const updateGist: Action<string> = ({ state }, newGist) => {
   state.gistId = newGist;
@@ -116,8 +117,14 @@ export const onClickImportZip: Action<any> = async (
   { effects, state },
   file
 ) => {
-  let unzipped = effects.fileTools.loadFromZip(file);
-  console.log(unzipped);
+  let unzipped = await effects.fileTools.loadAndUnzipFile(file);
+  window.console.log(unzipped);
+  state.recording = JSON.parse(unzipped.cursorRecording);
+  state.audioRecording = unzipped.recordingAudio;
+  state.audioURL = unzipped.audioURL;
+  // state.recording = JSON.parse(await unzipped.files["recording.json"].asText());
+  // window.console.log(unzipped);
+  // state.audioRecording = unzipped.files["audio.ogg"];
   // state.audioRecording = unzipped.recordingAudio;
   // state.recording = unzipped.recordingJson;
 };

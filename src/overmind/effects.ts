@@ -31,20 +31,38 @@ export const fileTools = {
       saveAs(content, "recording.zip");
     });
   },
-  async loadFromZip(file: any) {
-    let reader = new FileReader();
+  async loadFile(inputFile: any): Promise<any> {
+    const temporaryFileReader = new FileReader();
 
-    let data;
+    return new Promise((resolve, reject) => {
+      temporaryFileReader.onerror = () => {
+        temporaryFileReader.abort();
+        reject(new DOMException("Problem parsing input file."));
+      };
 
-    const f = (e: any) => {
-      data = e.target.result;
-
-      reader.removeEventListener("load", f);
-
-      return JSZip.loadAsync(data);
-    };
-
-    reader.addEventListener("load", f);
-    reader.readAsArrayBuffer(file);
+      temporaryFileReader.onload = () => {
+        resolve(temporaryFileReader.result);
+      };
+      temporaryFileReader.readAsArrayBuffer(inputFile);
+    });
+  },
+  async loadAndUnzipFile(inputFile: any): Promise<any> {
+    try {
+      const fileContents = await this.loadFile(inputFile);
+      const zip = await JSZip.loadAsync(fileContents);
+      const cursorRecording = await zip.files["recording.json"].async("text");
+      const audioRecording = await zip.files["audio.ogg"].async("blob");
+      const audioURL = URL.createObjectURL(audioRecording);
+      return { cursorRecording, audioRecording, audioURL };
+    } catch (e) {
+      console.warn(e.message);
+    }
   }
 };
+
+// // // const async function
+// // async function unzipFile(e: any, reader: any) {
+// //   data = e.target.result;
+// const unzipped = await JSZip.loadAsync(data);
+// return unzipped;
+// // }

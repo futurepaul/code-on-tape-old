@@ -3,6 +3,7 @@ import { useRef } from "react";
 import styled from "styled-components";
 import { useOvermind } from "../overmind";
 import useRecorder from "./audio/useRecorder";
+import { FileLoader } from "./FileLoader";
 
 const FloatControls = styled.div`
   position: fixed;
@@ -65,7 +66,11 @@ export const Controls: React.FunctionComponent = () => {
 
   return (
     <FloatControls>
-      <audio ref={audioPlayerEl} src={audioURL} />
+      <audio
+        ref={audioPlayerEl}
+        src={state.audioURL ? state.audioURL : audioURL}
+      />
+
       <Play isActive={state.isPlaying} onClick={onPlayButtonClick}>
         {" "}
         Play
@@ -74,6 +79,7 @@ export const Controls: React.FunctionComponent = () => {
         Record
       </Record>
       <Button onClick={() => actions.onClickSaveZip(audioBlob)}>Save</Button>
+      <FileLoader importFile={actions.onClickImportZip} />
     </FloatControls>
   );
 };
